@@ -2,10 +2,6 @@ package calculator;
 
 //TODO: разделить метод на меньшие части
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeComparator;
-import org.joda.time.DateTimeZone;
-
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -27,7 +23,7 @@ public class Price {
 //        System.out.println("Rounded up end date: " + ceilToDate);
 //    }
 
-    public LocalDateTime roundDown(LocalDateTime fromDate) {
+    public LocalDateTime roundFloor(LocalDateTime fromDate) {
         //Round down to hours
         LocalDateTime floorFromDate = fromDate.withMinute(0).withSecond(0).withNano(0);
         System.out.println("Rounded down start date: " + floorFromDate);
@@ -35,16 +31,16 @@ public class Price {
         return floorFromDate;
     }
 
-    public LocalDateTime roundUp(LocalDateTime fromDate) {
+    public LocalDateTime roundCeil(LocalDateTime toDate) {
         //Round up to hours
-        LocalDateTime ceilToDate = fromDate.withMinute(0).withSecond(0).withNano(0);
+        LocalDateTime ceilToDate = toDate.withMinute(0).withSecond(0).withNano(0).plusHours(1);
         System.out.println("Rounded up end date: " + ceilToDate);
 
         return ceilToDate;
     }
 
     //Избавляемся от секунд и миллисекуд, округляем до часов и минут
-    public LocalDateTime truncateToMin(LocalDateTime dateTime) {
+    public LocalDateTime cutSeconds(LocalDateTime dateTime) {
         DateTimeFormatter formatter = DateTimeFormatter
                 .ofPattern("yyyy-MM-dd'T'HH:mm", Locale.ENGLISH);
 //        LocalDateTime res = LocalDateTime.parse(dateTime.toString(), formatter);
@@ -102,11 +98,42 @@ public class Price {
 
     //Проверка дней
     public void testWeek(LocalDateTime fromDate, LocalDateTime toDate) {
-        //Найти время начала уикенда Joda
+        System.out.println("Передано fromDate: " + fromDate);
+        System.out.println("Передано toDate: " + toDate);
+        //Округлим даты и обрежем
+        LocalDateTime start = cutSeconds(roundFloor(fromDate));
+        System.out.println("start is now: " + start);
+        LocalDateTime end = cutSeconds(roundCeil(toDate));
+        System.out.println("end is now: " + end);
 
-        DateTimeZone timeZone = DateTimeZone.forID("GMT");
-        DateTime date1 = DateTime.parse(fromDate.toString());
-        System.out.println("joda: " + date1);
+
+        //Тест - выводим все часы по одному прибавляя, до момента завершения времени
+        int count = 0;
+        for (LocalDateTime i = start; i.isBefore(end); i = i.plusHours(1) ) {
+            count++;
+            System.out.println(count + " time " + i);
+        }
+        //Найти время начала уикенда
+        System.out.println(fromDate.getDayOfWeek()); //день недели, когда начался отсчет
+
+        //Вычисляем количество часов между датами
+        long hours = ChronoUnit.HOURS.between(start, end);
+        System.out.println("Chrono.HOURS: " + hours);
+
+//        //Переводим даты в формат joda
+//        DateTimeZone timeZone = DateTimeZone.forID("GMT");
+//        DateTime start = DateTime.parse(fromDate.toString());
+//        DateTime end = DateTime.parse(toDate.toString());
+//        System.out.println("joda: " + start);
+//
+//        DateTime saturdayBegins = start.withDayOfWeek(6).withTimeAtStartOfDay();
+//        DateTime sundayEnds = saturdayBegins.plusDays(2).minus(1);
+//        System.out.println("weekend starts: " + saturdayBegins +"___" + saturdayBegins.getDayOfWeek());
+//        System.out.println("weekend ends: " + sundayEnds +"___" + sundayEnds.getDayOfWeek());
+//
+//        Hours weekdayHours = Hours.hoursBetween(start, end);
+//        System.out.println("Часы по фулл-прайс: " + weekdayHours.toString());
+
 
 
 

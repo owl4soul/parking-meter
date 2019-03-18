@@ -3,7 +3,6 @@ package calculator;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -11,7 +10,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,23 +28,22 @@ public class Meter {
     LocalDateTime dateTime1;
     LocalDateTime dateTime2;
 
-    public Meter(LocalDateTime[] datesTimes, LocalDate date1, LocalTime time1, LocalDate date2, LocalTime time2, LocalDateTime dateTime1, LocalDateTime dateTime2) {
-        this.datesTimes = datesTimes;
-        this.date1 = date1;
-        this.time1 = time1;
-        this.date2 = date2;
-        this.time2 = time2;
-        this.dateTime1 = dateTime1;
-        this.dateTime2 = dateTime2;
-    }
-
+    //CONSTRUCT
     public Meter() {
         System.out.println("Вызван конструктор без параметров: " + "\n");
         String[] inputSubstrings = getSubstrings();
         this.datesTimes = getDatesTimes(inputSubstrings);
+
+        this.date1 = getDate(inputSubstrings[0]);
+        this.time1 = getTime(inputSubstrings[1]);
+        this.date2 = getDate(inputSubstrings[2]);
+        this.time2 = getTime(inputSubstrings[3]);
+
+        this.dateTime1 = LocalDateTime.of(date1, time1);
+        this.dateTime2 = LocalDateTime.of(date2, time2);
     }
 
-
+    //Get user input and transform it to substrings array
     public String[] getSubstrings() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
@@ -108,28 +105,6 @@ public class Meter {
         return time;
     }
 
-
-
-
-
-//        //Принимаем ввод строки, парсим в ней даты
-//        String input = "calc 2016-02-19 12:22:19.000 to 2016-02-20 14:01:00.000"; //TODO заменить на считывание
-//
-//
-//        String[] substrings = input.split(" ");
-
-
-
-
-
-
-
-    String tmp1 = "2016-02-19 12:22:19.000"; //TODO: заменить на значение из массива сабстрингов
-    String tmp2 = "2016-02-20 14:01:00.000";
-
-    DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd' 'HH:mm:ss.SSS");
-    LocalDateTime fromDate1 = LocalDateTime.parse(tmp1, format);
-    LocalDateTime toDate = LocalDateTime.parse(tmp2, format);
-
+//    DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd' 'HH:mm:ss.SSS");
 
 }

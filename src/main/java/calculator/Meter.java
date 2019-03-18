@@ -54,7 +54,7 @@ public class Meter {
             String[] inputStrings = reader.readLine().split(" ");
 
             //Будем работать с массивом как со списком для упрощения
-            List<String> substringsList = Arrays.asList(inputStrings);
+            List<String> substringsList = new ArrayList<>(Arrays.asList(inputStrings));
 
             //Пройдемся в цикле, чтоб удалить из массива substrings лишние ячейки, содержащие слова
             for (int i = 0; i < substringsList.size(); i++) {

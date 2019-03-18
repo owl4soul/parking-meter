@@ -77,7 +77,7 @@ public class Meter {
 
     //Проверка, является ли эта строка словом (состоит ли из букв)
     public boolean isWord(String testString) {
-        Pattern pattern = Pattern.compile("[aA-zZ]");
+        Pattern pattern = Pattern.compile("[a-z|A-z]+");
         Matcher matcher = pattern.matcher(testString);
         return matcher.matches();
     }

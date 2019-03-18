@@ -3,10 +3,11 @@ package calculator;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Map;
 
 public class Program {
     public static void main(String[] args) throws IOException {
-        Meter meter = new Meter();
+
         Price price = new Price();
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -14,36 +15,17 @@ public class Program {
         try {
             String input = reader.readLine();
             if (input.equals("price")) {
-                System.out.println("PRICE-----");
+                for (Map.Entry<String, Integer> entry : price.priceMap.entrySet()) {
+                    System.out.println(entry.toString().replace('=', ' ') + " у.е в час");
+                }
             } else {
-                meter.getSubstrings(input);
+                Meter meter = new Meter(input);
+                price.countPrice(meter.dateTime1, meter.dateTime2);
             }
         } catch (IOException e) {
             e.toString();
         } finally {
             reader.close();
         }
-
-
-
-
-
-
-        //TODO: тесты убрать
-        Meter met = new Meter();
-
-        Price p = new Price();
-        p.getInstantsOfPeriod(met.dateTime1, met.dateTime2);
-        System.out.println();
-        System.out.println(met.dateTime1);
-        System.out.println();
-        p.getInstantsOfPeriod(met.dateTime1, met.dateTime2);
-
-        System.out.println("__________________________________");
-        p.countPrice(met.dateTime1, met.dateTime2);
-
-        System.out.println("__________________________________");
-        p.cutSeconds(met.dateTime1);
-
     }
 }

@@ -96,6 +96,4 @@ public class Meter {
         return time;
     }
 
-//    DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd' 'HH:mm:ss.SSS");
-
 }

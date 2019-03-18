@@ -27,7 +27,6 @@ public class Price {
     public LocalDateTime roundFloor(LocalDateTime fromDate) {
         //Round down to hours
         LocalDateTime floorFromDate = fromDate.withMinute(0).withSecond(0).withNano(0);
-        System.out.println("Rounded down start date: " + floorFromDate);
 
         return floorFromDate;
     }
@@ -35,7 +34,6 @@ public class Price {
     public LocalDateTime roundCeil(LocalDateTime toDate) {
         //Round up to hours
         LocalDateTime ceilToDate = toDate.withMinute(0).withSecond(0).withNano(0).plusHours(1);
-        System.out.println("Rounded up end date: " + ceilToDate);
 
         return ceilToDate;
     }
@@ -44,43 +42,10 @@ public class Price {
     public LocalDateTime cutSeconds(LocalDateTime dateTime) {
         DateTimeFormatter formatter = DateTimeFormatter
                 .ofPattern("yyyy-MM-dd'T'HH:mm", Locale.ENGLISH);
-//        LocalDateTime res = LocalDateTime.parse(dateTime.toString(), formatter);
-//        System.out.println(res);
-        LocalDateTime truncated = dateTime.truncatedTo(ChronoUnit.MINUTES);
-        System.out.println("Обрезаем до минут: " + truncated);
-        return truncated;
-    }
 
+        LocalDateTime roundToMin = dateTime.truncatedTo(ChronoUnit.MINUTES);
 
-//TODO: дублирующийся код - теперь есть отдельные методы, применить их
-    public Instant[] getInstantsOfPeriod(LocalDateTime fromDate, LocalDateTime toDate) {
-        System.out.println("from " + fromDate);
-        System.out.println("to " + toDate);
-
-        System.out.println();
-        //Round down to hours
-        LocalDateTime floorFromDate = fromDate.withMinute(0).withSecond(0).withNano(0);
-        System.out.println("Rounded down start date: " + floorFromDate);
-        //Round up to hours
-        LocalDateTime ceilToDate = toDate.plusHours(1).withMinute(0).withSecond(0).withNano(0);
-        System.out.println("Rounded up end date: " + ceilToDate);
-        System.out.println();
-
-        DateTimeFormatter formatter = DateTimeFormatter
-                .ofPattern("yyyy-MM-dd'T'HH:mm")
-                .withZone(ZoneId.of("GMT"));
-//        System.out.println(ZoneId.getAvailableZoneIds());
-
-        Instant instantStart = Instant.from(formatter.parse(floorFromDate.toString()));
-        System.out.println("Зафиксированное время начала парковки: "+ instantStart.toString());
-        Instant instantEnd = Instant.from(formatter.parse(ceilToDate.toString()));
-        System.out.println("Зафиксированное время окончания парковки: "+ instantEnd.toString());
-
-        Instant[] instants = new Instant[2];
-        instants[0] = instantStart;
-        instants[1] = instantEnd;
-
-        return instants;
+        return roundToMin;
     }
 
     //Расчет цен в зависимости от дня недели и времени
@@ -99,44 +64,33 @@ public class Price {
 
     //Проверка дней
     public int countPrice(LocalDateTime fromDate, LocalDateTime toDate) {
-        System.out.println("Передано fromDate: " + fromDate);
-        System.out.println("Передано toDate: " + toDate);
         //Округлим даты и обрежем
         LocalDateTime start = cutSeconds(roundFloor(fromDate));
-        System.out.println("start is now: " + start);
         LocalDateTime end = cutSeconds(roundCeil(toDate));
-        System.out.println("end is now: " + end);
 
-
-
-        //Тест - выводим все часы по одному прибавляя, до момента завершения времени
-        int count = 0;
         int countWeekDays = 0;
         int countWeekNights = 0;
         int countWeekends = 0;
+
         for (LocalDateTime i = start; i.isBefore(end); i = i.plusHours(1) ) {
-            count++;
-            System.out.println(count + " time " + i);
             if (i.getDayOfWeek().compareTo(DayOfWeek.SATURDAY) == 0
                     | i.getDayOfWeek().compareTo(DayOfWeek.SUNDAY) == 0) {
                 countWeekends++;
-                System.out.println("Выходной");
-                System.out.println("Часы по прайсу выходного дня: " + countWeekends);
             } else if (i.getHour() >= 8 & i.getHour() < 18) {
                 countWeekDays++;
-                System.out.println("Часы по прайсу буднего дня с 8 до 18: " + countWeekDays);
+
             } else {
                 countWeekNights++;
-                System.out.println("Часы по прайсу буднего дня с 18 до 8: " + countWeekNights);
             }
         }
-        System.out.println("часов по 20 " + countWeekDays);
-        System.out.println("часов по 15 " + countWeekNights);
-        System.out.println("часов по 10 " + countWeekends);
+        System.out.println("Расчёт стоимости парковки...");
+        System.out.println(countWeekDays + " часов по 20 у.е  = " + countCostWeekDay(countWeekDays) + "у.е.");
+        System.out.println(countWeekNights + " часов по 15 у.е  = " + countCostWeekNight(countWeekNights) + "у.е.");
+        System.out.println(countWeekends + " часов по 10 у.е  = " + countCostWeekend(countWeekends) + "у.е.");
         int fullPrice = countCostWeekDay(countWeekDays)
                 + countCostWeekNight(countWeekNights)
                 + countCostWeekend(countWeekends);
-        System.out.println("Общая сумма: " + fullPrice);
+        System.out.println("Общая сумма:  " + fullPrice + " у.е.");
         return fullPrice;
     }
 }

@@ -2,6 +2,8 @@ package calculator;
 
 //TODO: разделить метод на меньшие части
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeComparator;
 import org.joda.time.DateTimeZone;
 
 import java.time.*;
@@ -72,17 +74,23 @@ public class Price {
     //Проверка дней
     public void testWeek(LocalDateTime fromDate, LocalDateTime toDate) {
         //Найти время начала уикенда Joda
-        DateTimeZone
+        DateTimeFormatter formatter = DateTimeFormatter
+                .ofPattern("yyyy-MM-dd'T'HH:mm")
+                .withZone(ZoneId.of("GMT"));
+//        System.out.println(ZoneId.getAvailableZoneIds());
+        DateTimeZone timeZone = DateTimeZone.forID("GMT");
+        DateTime date1 = DateTime.parse(fromDate.toString());
+        System.out.println("joda: " + date1);
 
 
 
-        for (LocalDateTime i = fromDate; i.isBefore(toDate); ) {
-
-            if (DayOfWeek.from(i).compareTo(DayOfWeek.SATURDAY) == 0
-                    || DayOfWeek.from(i).compareTo(DayOfWeek.SUNDAY) == 0) {
-                LocalDateTime timeOfWeekendEnd = LocalDateTime.of(i, "yyyy-MM-dd'T'HH:mm");
-                Duration dur = Duration.between(i, i);
-            }
-        }
+//        for (LocalDateTime i = fromDate; i.isBefore(toDate); ) {
+//
+//            if (DayOfWeek.from(i).compareTo(DayOfWeek.SATURDAY) == 0
+//                    || DayOfWeek.from(i).compareTo(DayOfWeek.SUNDAY) == 0) {
+////                LocalDateTime timeOfWeekendEnd = LocalDateTime.of(i, "yyyy-MM-dd'T'HH:mm");
+////                Duration dur = Duration.between(i, i);
+//            }
+//        }
     }
 }

@@ -7,6 +7,9 @@ public class Program {
 
         Price p = new Price();
         p.countPrice(met.dateTime1, met.dateTime2);
-
+        System.out.println();
+        System.out.println(met.dateTime1);
+        System.out.println();
+        p.applyPrice(met.dateTime1, met.dateTime2);
     }
 }

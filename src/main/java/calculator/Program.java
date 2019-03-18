@@ -15,5 +15,8 @@ public class Program {
         System.out.println("__________________________________");
         p.testWeek(met.dateTime1, met.dateTime2);
 
+        System.out.println("__________________________________");
+        p.truncateToMin(met.dateTime1);
+
     }
 }

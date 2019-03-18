@@ -8,6 +8,8 @@ import org.joda.time.DateTimeZone;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.Locale;
 
 public class Price {
     int priceWeekDay = 20;
@@ -25,8 +27,35 @@ public class Price {
 //        System.out.println("Rounded up end date: " + ceilToDate);
 //    }
 
+    public LocalDateTime roundDown(LocalDateTime fromDate) {
+        //Round down to hours
+        LocalDateTime floorFromDate = fromDate.withMinute(0).withSecond(0).withNano(0);
+        System.out.println("Rounded down start date: " + floorFromDate);
+
+        return floorFromDate;
+    }
+
+    public LocalDateTime roundUp(LocalDateTime fromDate) {
+        //Round up to hours
+        LocalDateTime ceilToDate = fromDate.withMinute(0).withSecond(0).withNano(0);
+        System.out.println("Rounded up end date: " + ceilToDate);
+
+        return ceilToDate;
+    }
+
+    //Избавляемся от секунд и миллисекуд, округляем до часов и минут
+    public LocalDateTime truncateToMin(LocalDateTime dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter
+                .ofPattern("yyyy-MM-dd'T'HH:mm", Locale.ENGLISH);
+//        LocalDateTime res = LocalDateTime.parse(dateTime.toString(), formatter);
+//        System.out.println(res);
+        LocalDateTime truncated = dateTime.truncatedTo(ChronoUnit.MINUTES);
+        System.out.println("Обрезаем до минут: " + truncated);
+        return truncated;
+    }
 
 
+//TODO: дублирующийся код - теперь есть отдельные методы, применить их
     public Instant[] getInstantsOfPeriod(LocalDateTime fromDate, LocalDateTime toDate) {
         System.out.println("from " + fromDate);
         System.out.println("to " + toDate);
@@ -74,10 +103,7 @@ public class Price {
     //Проверка дней
     public void testWeek(LocalDateTime fromDate, LocalDateTime toDate) {
         //Найти время начала уикенда Joda
-        DateTimeFormatter formatter = DateTimeFormatter
-                .ofPattern("yyyy-MM-dd'T'HH:mm")
-                .withZone(ZoneId.of("GMT"));
-//        System.out.println(ZoneId.getAvailableZoneIds());
+
         DateTimeZone timeZone = DateTimeZone.forID("GMT");
         DateTime date1 = DateTime.parse(fromDate.toString());
         System.out.println("joda: " + date1);

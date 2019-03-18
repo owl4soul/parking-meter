@@ -66,8 +66,8 @@ public class Meter {
 
             }
 
-            String[] onlyDatesTime = (String[]) substringsList.toArray();
-            return onlyDatesTime;
+            String[] onlyDatesTimes = substringsList.toArray(new String[0]);
+            return onlyDatesTimes;
 
         } catch (IOException e) {
             System.out.println(e.toString());

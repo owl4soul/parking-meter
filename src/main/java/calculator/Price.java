@@ -99,6 +99,7 @@ public class Price {
         LocalDateTime end = cutSeconds(roundCeil(toDate));
         System.out.println("end is now: " + end);
 
+
         //Интервал дней:
         Interval interval = new Interval(DateTime.parse(start.toString()), DateTime.parse(end.toString()));
 
@@ -106,11 +107,22 @@ public class Price {
 
         //Тест - выводим все часы по одному прибавляя, до момента завершения времени
         int count = 0;
+        int countWeekDays = 0;
+        int countWeekNights = 0;
+        int countWeekends = 0;
         for (LocalDateTime i = start; i.isBefore(end); i = i.plusHours(1) ) {
             count++;
             System.out.println(count + " time " + i);
-            if (interval.contains(DateTime.parse(i.toString()))) {
-                System.out.println("Входит!!!");
+            if (i.getDayOfWeek().compareTo(DayOfWeek.SATURDAY) == 0) {
+                countWeekends++;
+                System.out.println("Выходной");
+                System.out.println("Часы по прайсу выходного дня: " + countWeekends);
+            } else if (i.getHour() >= 8 & i.getHour() < 18) {
+                countWeekDays++;
+                System.out.println("Часы по прайсу буднего дня с 8 до 18: " + countWeekDays);
+            } else {
+                countWeekNights++;
+                System.out.println("Часы по прайсу буднего дня с 18 до 8: " + countWeekNights);
             }
         }
 

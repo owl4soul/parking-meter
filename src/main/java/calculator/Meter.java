@@ -30,7 +30,7 @@ public class Meter {
 
     //CONSTRUCT
     public Meter() {
-        System.out.println("Вызван конструктор без параметров: " + "\n");
+        System.out.println("Введите дату в формате " + "\"calc 2016-02-19 12:22:19.000 to 2016-02-20 14:01:00.000\": ");
         String[] inputSubstrings = getSubstrings();
         this.datesTimes = getDatesTimes(inputSubstrings);
 

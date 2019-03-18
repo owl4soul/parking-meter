@@ -2,6 +2,9 @@ package calculator;
 
 //TODO: разделить метод на меньшие части
 
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
+
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -12,17 +15,7 @@ public class Price {
     int priceWeekNight = 15;
     int priceWeekend = 10;
 
-
-//    public void countPrice(LocalDateTime fromDate, LocalDateTime toDate) {
-//        //Round down to hours
-//        LocalDateTime floorFromDate = fromDate.withMinute(0).withSecond(0).withNano(0);
-//        System.out.println("Rounded down start date: " + floorFromDate);
-//
-//        //Round up to hours
-//        LocalDateTime ceilToDate = toDate.plusHours(1).withMinute(0).withSecond(0).withNano(0);
-//        System.out.println("Rounded up end date: " + ceilToDate);
-//    }
-
+    //Округления
     public LocalDateTime roundFloor(LocalDateTime fromDate) {
         //Round down to hours
         LocalDateTime floorFromDate = fromDate.withMinute(0).withSecond(0).withNano(0);
@@ -106,19 +99,30 @@ public class Price {
         LocalDateTime end = cutSeconds(roundCeil(toDate));
         System.out.println("end is now: " + end);
 
+        //Интервал дней:
+        Interval interval = new Interval(DateTime.parse(start.toString()), DateTime.parse(end.toString()));
+
+
 
         //Тест - выводим все часы по одному прибавляя, до момента завершения времени
         int count = 0;
         for (LocalDateTime i = start; i.isBefore(end); i = i.plusHours(1) ) {
             count++;
             System.out.println(count + " time " + i);
+            if (interval.contains(DateTime.parse(i.toString()))) {
+                System.out.println("Входит!!!");
+            }
         }
+
         //Найти время начала уикенда
-        System.out.println(fromDate.getDayOfWeek()); //день недели, когда начался отсчет
+        System.out.println(start.getDayOfWeek()); //день недели, когда начался отсчет
+
 
         //Вычисляем количество часов между датами
         long hours = ChronoUnit.HOURS.between(start, end);
         System.out.println("Chrono.HOURS: " + hours);
+
+        //Зададим крайние точки выходных
 
 //        //Переводим даты в формат joda
 //        DateTimeZone timeZone = DateTimeZone.forID("GMT");

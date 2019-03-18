@@ -10,6 +10,6 @@ public class Program {
         System.out.println();
         System.out.println(met.dateTime1);
         System.out.println();
-        p.applyPrice(met.dateTime1, met.dateTime2);
+        p.getInstantsOfPeriod(met.dateTime1, met.dateTime2);
     }
 }

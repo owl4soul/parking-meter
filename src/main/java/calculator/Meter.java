@@ -1,8 +1,5 @@
 package calculator;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -29,9 +26,8 @@ public class Meter {
     LocalDateTime dateTime2;
 
     //CONSTRUCT
-    public Meter() {
-        System.out.println("Введите дату в формате " + "\"calc 2016-02-19 12:22:19.000 to 2016-02-20 14:01:00.000\": ");
-        String[] inputSubstrings = getSubstrings();
+    public Meter(String input) {
+        String[] inputSubstrings = getSubstrings(input);
         this.datesTimes = getDatesTimes(inputSubstrings);
 
         this.date1 = getDate(inputSubstrings[0]);
@@ -44,11 +40,9 @@ public class Meter {
     }
 
     //Get user input and transform it to substrings array
-    public String[] getSubstrings() {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        try {
+    public String[] getSubstrings(String input) {
             //Split input line into separated words
-            String[] inputStrings = reader.readLine().split(" ");
+            String[] inputStrings = input.split(" ");
 
             //Будем работать с массивом как со списком для упрощения
             List<String> substringsList = new ArrayList<>(Arrays.asList(inputStrings));
@@ -63,13 +57,10 @@ public class Meter {
 
             }
 
-            String[] onlyDatesTimes = substringsList.toArray(new String[0]);
-            return onlyDatesTimes;
+            String[] strDatesTimes = substringsList.toArray(new String[0]);
+            return strDatesTimes;
 
-        } catch (IOException e) {
-            System.out.println(e.toString());
-            return null;
-        }
+
     }
 
     //Проверка, является ли эта строка словом (состоит ли из букв)
